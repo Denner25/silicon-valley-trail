@@ -1,0 +1,40 @@
+.game-container {
+  border: 1px solid #444;
+  padding: 25px;
+  border-radius: 10px;
+}
+
+.stats p {
+  margin: 4px 0;
+}
+
+.controls {
+  margin-top: 20px;
+}
+
+.controls select {
+  padding: 8px;
+  margin-right: 10px;
+}
+
+.intermediate-choice ul {
+  list-style: none;
+}
+
+.history {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.history ul {
+  padding-left: 18px;
+}
+
+.history-entry {
+  margin: 10px 0;
+}
+
+.game-result {
+  margin-top: 20px;
+  color: #4caf50;
+}
