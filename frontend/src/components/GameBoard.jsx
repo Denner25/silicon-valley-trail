@@ -8,13 +8,19 @@ function GameBoard() {
   const [intermediateChoice, setIntermediateChoice] = useState(null);
   const [showChoice, setShowChoice] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [playerName, setPlayerName] = useState("Denner"); // default player name
 
   function startGame() {
+    if (!playerName.trim()) {
+      alert("Please enter a valid name.");
+      return;
+    }
+
     setLoading(true);
     fetch("http://localhost:3001/game/start", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ playerName: "Denner" }),
+      body: JSON.stringify({ playerName: playerName.trim() }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -61,6 +67,14 @@ function GameBoard() {
   if (!game || !game.resources || !game.history) {
     return (
       <section className="game-container">
+        <label>
+          Enter Player Name:
+          <input
+            type="text"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+          />
+        </label>
         <button onClick={startGame} disabled={loading}>
           Start Game
         </button>
@@ -73,7 +87,9 @@ function GameBoard() {
     <section className="game-container">
       {/* ================= Stats ================= */}
       <div className="stats">
-        <h2>Day {game.history.length + 1}</h2>
+        <h2>
+          Day {game.history.length + 1} - Player: {game.playerName}
+        </h2>
         <p>Location: {game.currentLocation}</p>
         <p>Cash: {game.resources.cash}</p>
         <p>Morale: {game.resources.morale}</p>
@@ -186,23 +202,31 @@ function GameBoard() {
         <ul>
           {game.history.map((h) => (
             <li key={h.day} className="history-entry">
-              <strong>Day {h.day}</strong>
+              <strong>
+                Day {h.day} - Player: {game.playerName}
+              </strong>
               <div>Action: {h.action}</div>
               <div>Intermediate Choice: {h.intermediateChoice}</div>
               <div>Location: {h.location}</div>
               <div>Event: {h.event}</div>
-              {h.description && <div className="event-description">{h.description}</div>}
+              {h.description && (
+                <div className="event-description">{h.description}</div>
+              )}
               {h.modifiers &&
                 h.modifiers.map((m, i) => (
                   <div key={i} className="modifier-note">
                     {m}
                   </div>
                 ))}
-              {h.weatherTemp && <div className="weather-impact">Weather: {h.weatherTemp}°F</div>}
+              {h.weatherTemp && (
+                <div className="weather-impact">Weather: {h.weatherTemp}°F</div>
+              )}
               <div className="resource-changes">
                 Resource Changes → Cash {h.resourceChanges.cash >= 0 ? "+" : ""}
-                {h.resourceChanges.cash} | Morale {h.resourceChanges.morale >= 0 ? "+" : ""}
-                {h.resourceChanges.morale} | Coffee {h.resourceChanges.coffee >= 0 ? "+" : ""}
+                {h.resourceChanges.cash} | Morale{" "}
+                {h.resourceChanges.morale >= 0 ? "+" : ""}
+                {h.resourceChanges.morale} | Coffee{" "}
+                {h.resourceChanges.coffee >= 0 ? "+" : ""}
                 {h.resourceChanges.coffee}
               </div>
             </li>
@@ -211,7 +235,10 @@ function GameBoard() {
       </div>
 
       {game.isOver && (
-        <h2 className="game-result" style={{ color: game.hasWon ? "green" : "red" }}>
+        <h2
+          className="game-result"
+          style={{ color: game.hasWon ? "green" : "red" }}
+        >
           {game.hasWon ? "You reached the destination!" : game.deathNote}
         </h2>
       )}
