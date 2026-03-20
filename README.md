@@ -48,25 +48,25 @@ npm install
 Create a `.env` file based on `.env.example`:
 
 ```env
-MONGO_URI=<your-mongodb-uri>
+MONGO_URI=mongodb://127.0.0.1:27017/silicon-valley-trail
 USE_MOCK_API=true
 PORT=3001
 ```
 
 - `USE_MOCK_API=true` → offline mode.
-- `MONGO_URI` → required for persistent game state.
+- `MONGO_URI` → uses a local MongoDB instance by default (no credentials required), you can replace MONGO_URI with any valid MongoDB connection string if desired.
 
 ### 4. Start Backend
 
 ```bash
-cd backend
+cd ../backend
 npm start
 ```
 
 ### 5. Start Frontend
 
 ```bash
-cd frontend
+cd ../frontend
 npm start
 ```
 
@@ -184,7 +184,3 @@ Game document tracks:
 - AI helped accelerate development and ensure clarity, but final gameplay design, balance, and feature implementation were developer-driven.
 
 ---
-
-## ✅ Offline Playability Confirmation
-
-Set `USE_MOCK_API=true` → game runs fully offline. All API-dependent events use mocks for consistent, offline-friendly gameplay.
