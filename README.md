@@ -23,7 +23,7 @@ A small, replayable startup-themed game inspired by _Oregon Trail_. Guide your s
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/<your-username>/silicon-valley-trail.git
+git clone https://github.com/Denner25/silicon-valley-trail
 cd silicon-valley-trail
 ```
 
@@ -45,7 +45,7 @@ npm install
 
 ### 3. Set Environment Variables
 
-Create a `.env` file based on `.env.example`:
+Create a `.env` file in the backend root based on this `.env.example`:
 
 ```env
 MONGO_URI=mongodb://127.0.0.1:27017/silicon-valley-trail
@@ -65,8 +65,10 @@ npm start
 
 ### 5. Start Frontend
 
+In a new terminal instance:
+
 ```bash
-cd ../frontend
+cd frontend
 npm start
 ```
 

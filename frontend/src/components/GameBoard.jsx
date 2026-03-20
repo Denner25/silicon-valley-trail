@@ -127,14 +127,22 @@ function GameBoard() {
 
       {/* ================= Controls ================= */}
       <div className="controls">
-        <select value={action} onChange={(e) => setAction(e.target.value)}>
-          <option value="travel">Travel</option>
-          <option value="rest">Rest</option>
-          <option value="hackathon">Hackathon</option>
-        </select>
-        <button onClick={handleTakeTurn} disabled={loading}>
-          Take Turn
-        </button>
+        {game.isOver ? (
+          <button onClick={startGame} disabled={loading}>
+            New Game
+          </button>
+        ) : (
+          <>
+            <select value={action} onChange={(e) => setAction(e.target.value)}>
+              <option value="travel">Travel</option>
+              <option value="rest">Rest</option>
+              <option value="hackathon">Hackathon</option>
+            </select>
+            <button onClick={handleTakeTurn} disabled={loading}>
+              Take Turn
+            </button>
+          </>
+        )}
       </div>
 
       {/* ================= Intermediate Choice ================= */}
