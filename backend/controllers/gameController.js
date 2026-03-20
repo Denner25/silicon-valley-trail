@@ -267,4 +267,4 @@ function takeTurn(req, res) {
     });
 }
 
-module.exports = { startGame, takeTurn };
+module.exports = { startGame, takeTurn, applyIntermediateChoice };
