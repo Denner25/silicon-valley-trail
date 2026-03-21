@@ -21,10 +21,12 @@ function fetchWeatherImpact(locationIndex) {
     .then((data) => {
       const temps = data.hourly?.temperature_2m || [];
       const times = data.hourly?.time || [];
-      if (temps.length === 0 || times.length === 0)
-        return mockWeatherImpact(locationIndex);
 
-      const nowHourStr = new Date().toISOString().slice(0, 13); // "YYYY-MM-DDTHH"
+      if (temps.length === 0 || times.length === 0) {
+        return mockWeatherImpact(locationIndex);
+      }
+
+      const nowHourStr = new Date().toISOString().slice(0, 13);
       let closestIndex = times.findIndex((t) => t.startsWith(nowHourStr));
       if (closestIndex === -1) closestIndex = 0;
 
@@ -47,15 +49,28 @@ function fetchWeatherImpact(locationIndex) {
 function fetchGitHubMarketPressure() {
   if (USE_MOCK) return mockGitHubMarketPressure();
 
-  const url =
-    "https://api.github.com/search/repositories?q=stars:>100&sort=stars&order=desc";
+  // ✅ NEW: simulate daily trending repos (last 24h)
+  const daysAgo = 1;
+  const date = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .split("T")[0];
+
+  const url = `https://api.github.com/search/repositories?q=created:>${date}&sort=stars&order=desc`;
 
   return fetch(url)
     .then((res) => res.json())
     .then((data) => {
-      const topRepos = data.items.slice(0, 2);
+      const items = data.items || [];
+
+      if (items.length === 0) {
+        return mockGitHubMarketPressure();
+      }
+
+      const topRepos = items.slice(0, 2);
+
       const pressure =
         topRepos.reduce((sum, r) => sum + r.stargazers_count, 0) / 1000;
+
       return {
         pressure: Math.min(Math.floor(pressure), 5),
         repos: topRepos.map((r) => ({
@@ -74,22 +89,38 @@ function fetchGitHubMarketPressure() {
 function fetchHackerNewsMorale() {
   if (USE_MOCK) return mockHackerNewsMorale();
 
+  // ✅ NEW: latest stories instead of static top stories
   const url =
-    "https://hn.algolia.com/api/v1/search?tags=story&numericFilters=points>100&hitsPerPage=2";
+    "https://hn.algolia.com/api/v1/search_by_date?tags=story&hitsPerPage=2";
 
   return fetch(url)
     .then((res) => res.json())
     .then((data) => {
-      const positiveKeywords = ["raise", "success", "funding", "launch"];
+      const positiveKeywords = [
+        "raise",
+        "success",
+        "funding",
+        "launch",
+        "growth",
+        "profit",
+        "acquire",
+        "release",
+        "win",
+        "expansion",
+      ];
       let morale = 0;
 
-      const stories = data.hits.map((story) => {
+      const stories = (data.hits || []).map((story) => {
         const title = story.title;
         const isPositive = positiveKeywords.some((kw) =>
           title.toLowerCase().includes(kw),
         );
         morale += isPositive ? 1 : -0.5;
-        return { title, impact: isPositive ? "+1" : "-0.5" };
+
+        return {
+          title,
+          impact: isPositive ? "+1" : "-0.5",
+        };
       });
 
       return { morale: Math.round(morale), stories };
