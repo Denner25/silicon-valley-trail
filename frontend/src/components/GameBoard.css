@@ -1,40 +1,651 @@
+/* ============================================
+   GAME BOARD — Terminal / Monospace Theme
+   ============================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  background: #0a0a0a;
+  margin: 0;
+  font-family: "Courier New", monospace;
+  color: #f5f5f5;
+}
+
+/* ============================================
+   OUTER CONTAINER
+   ============================================ */
+
 .game-container {
-  border: 1px solid #444;
-  padding: 25px;
-  border-radius: 10px;
+  min-height: 100vh;
+  background: #0a0a0a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px 80px;
+  font-family: "Courier New", monospace;
+}
+
+/* ============================================
+   START SCREEN
+   ============================================ */
+
+.game-start-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  background: #0a0a0a;
+  font-family: "Courier New", monospace;
+}
+
+.game-start-card {
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  padding: 48px 56px;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-start-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: #4ade80;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+
+.game-start-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #f5f5f5;
+  margin: 0 0 4px;
+  line-height: 1.2;
+}
+
+.game-start-subtitle {
+  font-size: 13px;
+  color: #555;
+  margin: 0 0 40px;
+}
+
+.game-start-label {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: #4ade80;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+  display: block;
+}
+
+.game-start-input {
+  width: 100%;
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 2px;
+  color: #f5f5f5;
+  font-family: "Courier New", monospace;
+  font-size: 15px;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.15s;
+  margin: 0 0 24px;
+  display: block;
+}
+
+.game-start-input:focus {
+  border-color: #4ade80;
+}
+
+.game-start-input::placeholder {
+  color: #333;
+}
+
+.game-start-btn {
+  width: 100%;
+  background: #4ade80;
+  color: #0a0a0a;
+  border: none;
+  border-radius: 2px;
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 14px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    opacity 0.15s;
+}
+
+.game-start-btn:hover:not(:disabled) {
+  background: #86efac;
+}
+
+.game-start-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.game-start-loading {
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: #4ade80;
+  margin-top: 20px;
+  animation: blink 1s step-end infinite;
+}
+
+.game-start-route {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #1a1a1a;
+  flex-wrap: wrap;
+}
+
+.game-start-stop {
+  font-size: 10px;
+  color: #333;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
+   ROUTE PROGRESS BAR
+   ============================================ */
+
+.route-progress {
+  width: 100%;
+  max-width: 640px;
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  padding: 20px 32px 16px;
+  margin-bottom: 16px;
+}
+
+.route-stops {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.route-stop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  flex: 1;
+}
+
+.route-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2a2a2a;
+  border: 1px solid #333;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+
+.route-stop.done .route-dot {
+  background: #166534;
+  border-color: #166534;
+}
+
+.route-stop.active .route-dot {
+  background: #4ade80;
+  border-color: #4ade80;
+  box-shadow: 0 0 6px #4ade8066;
+}
+
+.route-label {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: #333;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.route-stop.done .route-label {
+  color: #555;
+}
+
+.route-stop.active .route-label {
+  color: #4ade80;
+}
+
+.route-track {
+  height: 2px;
+  background: #1a1a1a;
+  border-radius: 1px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.route-fill {
+  height: 100%;
+  background: #4ade80;
+  border-radius: 1px;
+  transition: width 0.4s ease;
+}
+
+/* ============================================
+   STATS PANEL
+   ============================================ */
+
+.stats {
+  width: 100%;
+  max-width: 640px;
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  padding: 28px 32px;
+  margin-bottom: 16px;
+}
+
+.stats h2 {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #4ade80;
+  margin: 0 0 20px;
 }
 
 .stats p {
-  margin: 4px 0;
+  font-size: 13px;
+  color: #888;
+  margin: 0 0 6px;
 }
 
-.controls {
+.stats p span,
+.stats p strong {
+  color: #f5f5f5;
+}
+
+/* Inline resource display — keep original <p> tags working */
+.stats p:nth-child(3) {
+  color: #4ade80;
+} /* Cash */
+.stats p:nth-child(4) {
+  color: #60a5fa;
+} /* Morale */
+.stats p:nth-child(5) {
+  color: #f59e0b;
+} /* Coffee */
+
+/* Danger / warn overrides — applied via className in JSX */
+.stats p.warn {
+  color: #f59e0b !important;
+}
+.stats p.danger {
+  color: #f87171 !important;
+  animation: pulse-danger 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse-danger {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Weather block */
+.weather {
   margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #1a1a1a;
+}
+
+.weather h4 {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #555;
+  margin: 0 0 6px;
+}
+
+.weather p {
+  font-size: 20px !important;
+  font-weight: 700;
+  color: #f59e0b !important;
+  margin: 0;
+}
+
+/* Top Repos */
+.meta-repos {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #1a1a1a;
+}
+
+.meta-repos h4 {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #555;
+  margin: 0 0 8px;
+}
+
+.meta-repos div {
+  font-size: 12px;
+  color: #666;
+  padding: 3px 0;
+}
+
+/* Tech News */
+.meta-news {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #1a1a1a;
+}
+
+.meta-news h4 {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #555;
+  margin: 0 0 8px;
+}
+
+.meta-news div {
+  font-size: 12px;
+  color: #666;
+  padding: 3px 0;
+}
+
+/* ============================================
+   CONTROLS
+   ============================================ */
+
+.controls {
+  width: 100%;
+  max-width: 640px;
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  padding: 20px 32px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .controls select {
-  padding: 8px;
-  margin-right: 10px;
+  flex: 1;
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 2px;
+  color: #f5f5f5;
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+  padding: 10px 32px 10px 12px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23555'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.controls select:focus {
+  border-color: #4ade80;
+}
+
+.controls select option {
+  background: #111;
+  color: #f5f5f5;
+}
+
+.controls button {
+  background: #4ade80;
+  color: #0a0a0a;
+  border: none;
+  border-radius: 2px;
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    opacity 0.15s;
+  white-space: nowrap;
+}
+
+.controls button:hover:not(:disabled) {
+  background: #86efac;
+}
+
+.controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* New Game button spans full width */
+.controls button:only-child {
+  width: 100%;
+  padding: 12px 24px;
+}
+
+/* ============================================
+   INTERMEDIATE CHOICE
+   ============================================ */
+
+.intermediate-choice {
+  width: 100%;
+  max-width: 640px;
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-left: 3px solid #4ade80;
+  border-radius: 4px;
+  padding: 24px 32px;
+  margin-bottom: 16px;
+}
+
+.intermediate-choice h3 {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #4ade80;
+  margin: 0 0 16px;
 }
 
 .intermediate-choice ul {
   list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.history {
-  margin-top: 20px;
+.intermediate-choice li button {
+  width: 100%;
   text-align: left;
+  background: #0a0a0a;
+  border: 1px solid #2a2a2a;
+  border-radius: 2px;
+  color: #aaa;
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.intermediate-choice li button::before {
+  content: "> ";
+  color: #333;
+  transition: color 0.15s;
+}
+
+.intermediate-choice li button:hover {
+  border-color: #4ade80;
+  color: #f5f5f5;
+}
+
+.intermediate-choice li button:hover::before {
+  color: #4ade80;
+}
+
+/* ============================================
+   HISTORY
+   ============================================ */
+
+.history {
+  width: 100%;
+  max-width: 640px;
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  padding: 28px 32px;
+  margin-bottom: 16px;
+}
+
+.history h3 {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #555;
+  margin: 0 0 20px;
 }
 
 .history ul {
-  padding-left: 18px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .history-entry {
-  margin: 10px 0;
+  padding: 18px 0;
+  border-bottom: 1px solid #1a1a1a;
+  font-size: 12px;
+  line-height: 1.9;
+  color: #666;
 }
 
+.history-entry:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.history-entry strong {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #4ade80;
+  margin-bottom: 4px;
+}
+
+.event-description {
+  color: #888;
+  font-style: italic;
+}
+
+.modifier-note {
+  color: #60a5fa;
+  padding-left: 0;
+}
+
+.modifier-note::before {
+  content: "↳ ";
+  color: #1e3a5f;
+}
+
+.weather-impact {
+  color: #f59e0b;
+}
+
+.resource-changes {
+  margin-top: 8px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: #444;
+  border-top: 1px solid #1a1a1a;
+  padding-top: 8px;
+}
+
+/* ============================================
+   GAME RESULT
+   ============================================ */
+
 .game-result {
-  margin-top: 20px;
-  color: #4caf50;
+  width: 100%;
+  max-width: 640px;
+  font-size: 13px !important;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 24px 32px;
+  border-radius: 4px;
+  margin-top: 8px;
+  font-family: "Courier New", monospace;
+}
+
+/* Win — override inline green */
+.game-result[style*="green"] {
+  background: #051a0c !important;
+  border: 1px solid #166534 !important;
+  color: #4ade80 !important;
+}
+
+/* Lose — override inline red */
+.game-result[style*="red"] {
+  background: #150505 !important;
+  border: 1px solid #7f1d1d !important;
+  color: #f87171 !important;
+}
+
+/* ============================================
+   GLOBAL LOADING TEXT (inside game container)
+   ============================================ */
+
+.game-container > p {
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: #4ade80;
+  animation: blink 1s step-end infinite;
+  margin: 0;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
