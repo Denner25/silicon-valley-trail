@@ -129,17 +129,67 @@ function GameBoard() {
   }
 
   // ── MAIN GAME SCREEN ──────────────────────────────────────────
+
+  const STOPS = [
+    "SJC",
+    "PAL",
+    "MTV",
+    "SVL",
+    "CPT",
+    "MNP",
+    "RWC",
+    "SMT",
+    "FCS",
+    "SFO",
+  ];
+  const currentStop = Math.min(game.locationIndex, STOPS.length - 1);
+
+  function resourceClass(value, thresholdWarn, thresholdDanger) {
+    if (value <= thresholdDanger) return "danger";
+    if (value <= thresholdWarn) return "warn";
+    return "";
+  }
+
+  const cashClass = resourceClass(game.resources.cash, 40, 20);
+  const moraleClass = resourceClass(game.resources.morale, 10, 5);
+  const coffeeClass = resourceClass(game.resources.coffee, 2, 1);
+
   return (
     <section className="game-container">
+      {/* ── Route Progress ── */}
+      <div className="route-progress">
+        <div className="route-stops">
+          {STOPS.map((stop, i) => (
+            <div
+              key={stop}
+              className={`route-stop ${i < currentStop ? "done" : ""} ${i === currentStop ? "active" : ""}`}
+            >
+              <div className="route-dot" />
+              <span className="route-label">{stop}</span>
+            </div>
+          ))}
+        </div>
+        <div className="route-track">
+          <div
+            className="route-fill"
+            style={{ width: `${(currentStop / (STOPS.length - 1)) * 100}%` }}
+          />
+        </div>
+      </div>
+
       {/* ── Stats ── */}
       <div className="stats">
         <h2>
           Day {game.history.length + 1} — {game.playerName}
         </h2>
         <p>Location: {game.currentLocation}</p>
-        <p>Cash: ${game.resources.cash}</p>
-        <p>Morale: {game.resources.morale}</p>
-        <p>Coffee: {game.resources.coffee}</p>
+        <p className={`stat-cash ${cashClass}`}>Cash: ${game.resources.cash}</p>
+        <p className={`stat-morale ${moraleClass}`}>
+          Morale: {game.resources.morale}
+        </p>
+        <p className={`stat-coffee ${coffeeClass}`}>
+          Coffee: {game.resources.coffee}
+        </p>
 
         {game.lastWeather && (
           <div className="weather">
