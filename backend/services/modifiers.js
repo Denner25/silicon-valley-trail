@@ -73,10 +73,9 @@ function applyModifiers(team, eventName, result) {
 
       if (
         modifier &&
-        (
-          (Array.isArray(modifier.event) && modifier.event.includes(eventName)) ||
-          modifier.event === eventName
-        )
+        ((Array.isArray(modifier.event) &&
+          modifier.event.includes(eventName)) ||
+          modifier.event === eventName)
       ) {
         modifier.apply(result, member);
       }

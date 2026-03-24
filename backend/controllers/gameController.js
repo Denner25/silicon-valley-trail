@@ -11,7 +11,7 @@ const { LOCATIONS } = require("../utils/constants");
 const USE_MOCK_API = process.env.USE_MOCK_API === "true";
 
 // ----------------- Intermediate Choice -----------------
-function applyIntermediateChoice(action, choice, result, game) {
+function applyIntermediateChoice(action, choice, result) {
   if (!choice) return;
 
   // ----------------- HACKATHON -----------------
@@ -220,6 +220,7 @@ function takeTurn(req, res) {
             modifiers: result.notes,
           });
 
+          // Apply results
           game.resources.cash += result.cash;
           game.resources.morale += result.morale;
           game.resources.coffee += result.coffee;

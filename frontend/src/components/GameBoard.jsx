@@ -70,11 +70,11 @@ function GameBoard() {
       <section className="game-container">
         <div className="game-start-container">
           <div className="game-start-card">
-            <p className="game-start-eyebrow">Silicon Valley Run</p>
+            <p className="game-start-eyebrow">A startup road trip adventure:</p>
             <h1 className="game-start-title">
-              Startup
+              Silicon
               <br />
-              Road Trip
+              Valley Trail
             </h1>
             <p className="game-start-subtitle">
               San Jose → San Francisco · 10 stops

@@ -8,7 +8,6 @@ body {
 .app-container {
   display: flex;
   justify-content: center;
-  padding: 40px;
 }
 
 .app-content {
